@@ -91,7 +91,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_TRUONG`, `MA_SINH_VIEN`).
 |---|---|---|---|
 | `MA_PHIEN` | `uuid` | PK | Mã phiên đăng nhập |
 | `MA_NGUOI_DUNG` | `uuid` | NOT NULL, FK -> `nguoi_dung.MA_NGUOI_DUNG` | Người dùng sở hữu phiên |
-| `REFRESH_TOKEN` | `varchar(255)` | NOT NULL, UNIQUE | Refresh token đã hash |
+| `REFRESH_TOKEN` | `text` | NOT NULL, UNIQUE | Refresh token đã hash |
 | `FCM_TOKEN` | `text` | UNIQUE nếu khác NULL | Token gửi thông báo FCM |
 | `LOAI_THIET_BI` | `varchar(50)` | NULL | Loại thiết bị |
 | `IP_ADDRESS` | `inet` | NULL | Địa chỉ IP |
@@ -105,7 +105,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_TRUONG`, `MA_SINH_VIEN`).
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
-| `MA_THANG_DIEM` | `uuid` | PK | Mã thang điểm |
+| `MA_THANG_DIEM` | `INT` | PK | Mã thang điểm |
 | `MA_TRUONG` | `INT` | NOT NULL, FK -> `truong_hoc.MA_TRUONG` | Trường áp dụng |
 | `TEN_THANG_DIEM` | `varchar(100)` | NOT NULL | Tên thang điểm |
 | `DIEM_THAP_NHAT` | `numeric(4,2)` | NOT NULL | Điểm thấp nhất |
@@ -119,8 +119,8 @@ Ràng buộc bổ sung: UNIQUE (`MA_TRUONG`, `TEN_THANG_DIEM`).
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
-| `MA_CHI_TIET` | `uuid` | PK | Mã chi tiết thang điểm |
-| `MA_THANG_DIEM` | `uuid` | NOT NULL, FK -> `thang_diem.MA_THANG_DIEM` | Thang điểm cha |
+| `MA_CHI_TIET` | `INT` | PK | Mã chi tiết thang điểm |
+| `MA_THANG_DIEM` | `INT` | NOT NULL, FK -> `thang_diem.MA_THANG_DIEM` | Thang điểm cha |
 | `DIEM_CHU` | `varchar(10)` | NOT NULL | Điểm chữ |
 | `DIEM_HE_4` | `numeric(3,2)` | NOT NULL | Điểm hệ 4 |
 | `DIEM_THAP_NHAT` | `numeric(4,2)` | NOT NULL | Điểm tối thiểu |
@@ -132,7 +132,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_THANG_DIEM`, `DIEM_CHU`).
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
-| `MA_QUY_CHE` | `uuid` | PK | Mã quy chế |
+| `MA_QUY_CHE` | `INT` | PK | Mã quy chế |
 | `MA_TRUONG` | `INT` | NOT NULL, FK -> `truong_hoc.MA_TRUONG` | Trường áp dụng |
 | `TEN_XEP_LOAI` | `varchar(100)` | NOT NULL | Tên xếp loại học lực |
 | `GPA_TOI_THIEU` | `numeric(3,2)` | NOT NULL | GPA tối thiểu |
@@ -145,20 +145,20 @@ Ràng buộc bổ sung: UNIQUE (`MA_TRUONG`, `TEN_XEP_LOAI`).
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
 | `MA_HOC_KY` | `uuid` | PK | Mã học kỳ |
-| `MA_SINH_VIEN` | `uuid` | NOT NULL, FK -> `ho_so_sinh_vien.MA_NGUOI_DUNG` | Sinh viên sở hữu học kỳ |
+| `MA_NGUOI_DUNG` | `uuid` | NOT NULL, FK -> `ho_so_sinh_vien.MA_NGUOI_DUNG` | Sinh viên sở hữu học kỳ |
 | `TEN_HOC_KY` | `varchar(100)` | NOT NULL | Tên học kỳ |
 | `NGAY_BAT_DAU` | `date` | NULL | Ngày bắt đầu |
 | `NGAY_KET_THUC` | `date` | NULL | Ngày kết thúc |
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
 | `THOI_GIAN_CAP_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
 
-Ràng buộc bổ sung: UNIQUE (`MA_SINH_VIEN`, `TEN_HOC_KY`).
+Ràng buộc bổ sung: UNIQUE (`MA_NGUOI_DUNG`, `TEN_HOC_KY`).
 
 ## 10. `mon_hoc`
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
-| `MA_MON_HOC` | `INT` | PK | Mã môn học |
+| `MA_MON_HOC` | `uuid` | PK | Mã môn học |
 | `MA_HOC_KY` | `uuid` | NOT NULL, FK -> `hoc_ky.MA_HOC_KY` | Học kỳ chứa môn học |
 | `MA_MON` | `varchar(50)` | NULL | Mã môn |
 | `TEN_MON` | `varchar(255)` | NOT NULL | Tên môn học |
@@ -172,8 +172,8 @@ Ràng buộc bổ sung: UNIQUE (`MA_HOC_KY`, `MA_MON`).
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
-| `MA_THANH_PHAN` | `uuid` | PK | Mã thành phần điểm |
-| `MA_MON_HOC` | `INT` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
+| `MA_THANH_PHAN` | `INT` | PK | Mã thành phần điểm |
+| `MA_MON_HOC` | `uuid` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
 | `TEN_THANH_PHAN` | `varchar(100)` | NOT NULL | Tên thành phần điểm |
 | `TRONG_SO` | `numeric(5,2)` | NOT NULL | Trọng số điểm |
 | `DIEM` | `numeric(4,2)` | NULL | Điểm đạt được |
@@ -187,7 +187,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_MON_HOC`, `TEN_THANH_PHAN`).
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
 | `MA_LICH_HOC` | `uuid` | PK | Mã lịch học |
-| `MA_MON_HOC` | `INT` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
+| `MA_MON_HOC` | `uuid` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
 | `THU` | `smallint` | NOT NULL | Thứ trong tuần |
 | `TIET_BAT_DAU` | `smallint` | NOT NULL | Tiết bắt đầu |
 | `SO_TIET` | `smallint` | NOT NULL | Số tiết |
@@ -200,7 +200,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_MON_HOC`, `TEN_THANH_PHAN`).
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
 | `MA_LICH_THI` | `uuid` | PK | Mã lịch thi |
-| `MA_MON_HOC` | `INT` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
+| `MA_MON_HOC` | `uuid` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
 | `LOAI_THI` | `varchar(100)` | NULL | Loại thi |
 | `THOI_GIAN_THI` | `timestamptz` | NOT NULL | Thời gian thi |
 | `PHONG_THI` | `varchar(100)` | NULL | Phòng thi |
@@ -210,13 +210,13 @@ Ràng buộc bổ sung: UNIQUE (`MA_MON_HOC`, `TEN_THANH_PHAN`).
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
 | `MA_DEADLINE` | `uuid` | PK | Mã deadline |
-| `MA_MON_HOC` | `INT` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
+| `MA_MON_HOC` | `uuid` | NOT NULL, FK -> `mon_hoc.MA_MON_HOC` | Môn học |
 | `TIEU_DE` | `varchar(255)` | NOT NULL | Tiêu đề deadline |
 | `MO_TA` | `text` | NULL | Mô tả |
 | `HAN_NOP` | `timestamptz` | NOT NULL | Hạn nộp |
 | `TRANG_THAI` | `varchar(30)` | NOT NULL | Trạng thái |
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
-| `THOI_GIAN_TAO_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
+| `THOI_GIAN_CAP_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
 
 ## 15. `nhac_nho`
 
@@ -248,7 +248,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_MON_HOC`, `TEN_THANH_PHAN`).
 |---|---|---|---|
 | `MA_BO` | `uuid` | PK | Mã bộ flashcard |
 | `MA_NGUOI_DUNG` | `uuid` | NOT NULL, FK -> `nguoi_dung.MA_NGUOI_DUNG` | Người tạo bộ |
-| `MA_MON_HOC` | `INT` | FK -> `mon_hoc.MA_MON_HOC`, NULL | Môn học liên quan |
+| `MA_MON_HOC` | `uuid` | FK -> `mon_hoc.MA_MON_HOC`, NULL | Môn học liên quan |
 | `TEN_BO` | `varchar(255)` | NOT NULL | Tên bộ flashcard |
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
 | `THOI_GIAN_CAP_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
@@ -310,7 +310,7 @@ Khóa chính: (`MA_NHOM`, `MA_NGUOI_DUNG`).
 |---|---|---|---|
 | `MA_TAI_LIEU` | `uuid` | PK | Mã tài liệu |
 | `NGUOI_TAI_LEN` | `uuid` | NOT NULL, FK -> `nguoi_dung.MA_NGUOI_DUNG` | Người tải lên |
-| `MA_MON_HOC` | `INT` | FK -> `mon_hoc.MA_MON_HOC`, NULL | Môn học liên quan |
+| `MA_MON_HOC` | `uuid` | FK -> `mon_hoc.MA_MON_HOC`, NULL | Môn học liên quan |
 | `MA_NHOM` | `uuid` | FK -> `nhom_hoc_tap.MA_NHOM`, NULL | Nhóm liên quan |
 | `MA_GHI_CHU` | `uuid` | FK -> `ghi_chu.MA_GHI_CHU`, NULL | Ghi chú liên quan |
 | `DUONG_DAN_LUU_TRU` | `text` | NOT NULL, UNIQUE | Đường dẫn lưu trữ Firebase Storage |
@@ -356,12 +356,12 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
-| `MA_NHAT_KY` | `uuid` | PK | Mã nhật ký |
+| `MA_NHAT_KY` | `BIGINT` | PK | Mã nhật ký |
 | `NGUOI_THUC_HIEN` | `uuid` | FK -> `nguoi_dung.MA_NGUOI_DUNG`, NULL | Người thực hiện hành động |
 | `MUC_DO` | `varchar(30)` | NOT NULL | Mức độ log |
 | `HANH_DONG` | `varchar(100)` | NOT NULL | Hành động |
 | `BANG_TAC_DONG` | `varchar(100)` | NULL | Bảng bị tác động |
-| `MA_BAN_GHI` | `uuid` | NULL | Mã bản ghi bị tác động |
+| `MA_BAN_GHI` | `varchar(100)` | NULL | Mã bản ghi bị tác động |
 | `NOI_DUNG` | `text` | NULL | Nội dung log |
 | `DU_LIEU_JSON` | `jsonb` | NULL | Dữ liệu bổ sung |
 | `THOI_GIAN` | `timestamptz` | NOT NULL | Thời điểm ghi log |
