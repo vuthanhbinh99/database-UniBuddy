@@ -1,16 +1,15 @@
-# Cấu Trúc Table Database QLBTSV (Đã tối ưu hóa cho PostgreSQL)
+# Cấu Trúc Table Database QUẢN LÝ BÀI TẬP CHO SINH VIÊN
 
 ## Tổng Quan
 
 - Database: `QLBTSV`
 - Tổng số bảng: `25`
 - Tên bảng dùng tiếng Việt không dấu.
-- Tên cột trong bản này dùng chữ in hoa.
 - Các trường trạng thái và phân loại được chuẩn hóa bằng kiểu dữ liệu `ENUM` của PostgreSQL.
 
 ## Danh Sách Các PostgreSQL ENUM Định Nghĩa Trước
 
-Trước khi khởi tạo các bảng, các kiểu dữ liệu ENUM sau cần được khai báo trong PostgreSQL:
+các kiểu dữ liệu ENUM :
 
 1. `enum_trang_thai_nguoi_dung` (`HOAT_DONG`, `BI_KHOA`, `CHUA_XAC_THUC`)
 2. `enum_trang_thai_deadline` (`CHUA_LAM`, `DANG_LAM`, `HOAN_THANH`)
