@@ -1,4 +1,4 @@
-# Tài Liệu Quy Tắc Nghiệp Vụ Hệ Thống QLBTSV (Business Rules Document)
+# Tài Liệu Quy Tắc Nghiệp Vụ Hệ Thống UniBuddy (Business Rules Document)
 
 ## Tổng Quan
 Tài liệu này định nghĩa các quy tắc nghiệp vụ (Business Rules - BR) áp dụng cho hệ thống Quản lý Bài tập và Học tập của Sinh viên (QLBTSV). Bộ quy tắc này trực tiếp điều hướng logic xử lý tại tầng Backend và ràng buộc dữ liệu tại tầng Database dựa trên cấu trúc database 25 bảng hiện tại.
