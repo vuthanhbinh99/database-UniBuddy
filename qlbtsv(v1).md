@@ -6,6 +6,7 @@
 - Tổng số bảng: `25`
 - Tên bảng dùng tiếng Việt không dấu.
 - Các trường trạng thái và phân loại được chuẩn hóa bằng kiểu dữ liệu `ENUM` của PostgreSQL.
+- Thêm các contraint, ràng buộc, index cho database hệ thống
 
 ## Danh Sách Các PostgreSQL ENUM Định Nghĩa Trước
 
