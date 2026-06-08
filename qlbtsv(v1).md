@@ -421,3 +421,109 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 | `thong_bao` | `MA_NGUOI_NHAN` | `nguoi_dung.MA_NGUOI_DUNG` | N-1 |
 | `thong_bao` | `NGUOI_TAO` | `nguoi_dung.MA_NGUOI_DUNG` | N-1 |
 | `nhat_ky_he_thong` | `NGUOI_THUC_HIEN` | `nguoi_dung.MA_NGUOI_DUNG` | N-1 |
+
+## Ràng Buộc Bổ Sung
+
+| Nhóm/Bảng | Ràng buộc | Mục đích |
+|---|---|---|
+| `nguoi_dung` | `EMAIL` phải UNIQUE và NOT NULL | Không cho trùng tài khoản đăng nhập |
+| `nguoi_dung` | `TRANG_THAI` chỉ nhận giá trị trong `enum_trang_thai_nguoi_dung` | Kiểm soát trạng thái tài khoản |
+| `nguoi_dung` | Khi `TRANG_THAI = 'BI_KHOA'`, các phiên trong `phien_dang_nhap` phải được thu hồi | Đảm bảo tài khoản bị khóa không còn dùng token cũ |
+| `phien_dang_nhap` | `REFRESH_TOKEN` phải UNIQUE và NOT NULL | Mỗi phiên đăng nhập có một refresh token riêng |
+| `phien_dang_nhap` | `FCM_TOKEN` nên UNIQUE nếu khác NULL | Tránh một thiết bị nhận trùng push notification |
+| `phien_dang_nhap` | `THOI_GIAN_HET_HAN` phải lớn hơn `THOI_GIAN_TAO` | Không tạo phiên hết hạn ngay khi vừa đăng nhập |
+| `ho_so_sinh_vien` | UNIQUE (`MA_TRUONG`, `MA_SINH_VIEN`) | Một mã sinh viên không bị trùng trong cùng trường |
+| `thang_diem` | UNIQUE (`MA_TRUONG`, `TEN_THANG_DIEM`) | Mỗi trường không có hai thang điểm trùng tên |
+| `thang_diem` | `DIEM_THAP_NHAT < DIEM_CAO_NHAT` | Đảm bảo khoảng điểm hợp lệ |
+| `chi_tiet_thang_diem` | UNIQUE (`MA_THANG_DIEM`, `DIEM_CHU`) | Một thang điểm không có hai dòng điểm chữ trùng nhau |
+| `chi_tiet_thang_diem` | `DIEM_THAP_NHAT <= DIEM_CAO_NHAT` | Đảm bảo khoảng quy đổi điểm hợp lệ |
+| `quy_che_hoc_luc` | UNIQUE (`MA_TRUONG`, `TEN_XEP_LOAI`) | Mỗi trường không có hai mức xếp loại trùng tên |
+| `quy_che_hoc_luc` | `GPA_TOI_THIEU <= GPA_TOI_DA` | Đảm bảo khoảng GPA hợp lệ |
+| `hoc_ky` | UNIQUE (`MA_NGUOI_DUNG`, `TEN_HOC_KY`) | Một sinh viên không có hai học kỳ trùng tên |
+| `hoc_ky` | `NGAY_BAT_DAU <= NGAY_KET_THUC` nếu cả hai khác NULL | Đảm bảo thời gian học kỳ hợp lệ |
+| `mon_hoc` | UNIQUE (`MA_HOC_KY`, `MA_MON`) | Một học kỳ không có hai môn trùng mã |
+| `mon_hoc` | `SO_TIN_CHI > 0` | Số tín chỉ phải hợp lệ |
+| `thanh_phan_diem` | UNIQUE (`MA_MON_HOC`, `TEN_THANH_PHAN`) | Một môn không có hai thành phần điểm trùng tên |
+| `thanh_phan_diem` | `TRONG_SO > 0 AND TRONG_SO <= 100` | Trọng số từng thành phần phải hợp lệ |
+| `thanh_phan_diem` | `DIEM` nằm trong khoảng `0..10` nếu khác NULL | Điểm thành phần theo thang 10 |
+| `thanh_phan_diem` | Tổng `TRONG_SO` của một `MA_MON_HOC` nên bằng 100 | Đảm bảo tính điểm tổng kết chính xác |
+| `lich_hoc` | `THU` nằm trong khoảng `2..8` | Chuẩn hóa thứ trong tuần |
+| `lich_hoc` | `TIET_BAT_DAU > 0` và `SO_TIET > 0` | Đảm bảo tiết học hợp lệ |
+| `lich_hoc` | Không cho trùng lịch học của cùng sinh viên trong cùng thời điểm | Tránh xung đột thời khóa biểu |
+| `lich_thi` | `THOI_GIAN_THI` phải là thời điểm hợp lệ | Phục vụ nhắc lịch thi |
+| `deadline` | `TRANG_THAI` chỉ nhận giá trị trong `enum_trang_thai_deadline` | Chuẩn hóa trạng thái deadline |
+| `deadline` | Tự chuyển sang trạng thái trễ hạn khi quá `HAN_NOP` mà chưa hoàn thành | Phục vụ quy tắc deadline |
+| `nhac_nho` | Chỉ một trong hai cột `MA_DEADLINE`, `MA_LICH_THI` được dùng cho một bản ghi | Một nhắc nhở gắn với một đối tượng chính |
+| `nhac_nho` | `THOI_GIAN_NHAC` phải trước hoặc bằng thời gian sự kiện cần nhắc | Không tạo nhắc nhở sau hạn |
+| `thanh_vien_nhom` | PK (`MA_NHOM`, `MA_NGUOI_DUNG`) | Một người chỉ xuất hiện một lần trong cùng nhóm |
+| `thanh_vien_nhom` | `VAI_TRO_TRONG_NHOM` chỉ nhận giá trị trong `enum_vai_tro_nhom` | Chuẩn hóa vai trò nhóm |
+| `thanh_vien_nhom` | Nên có tối đa một `TRUONG_NHOM` trong mỗi `MA_NHOM` | Đảm bảo quyền điều hành nhóm rõ ràng |
+| `cong_viec_nhom` | `TRANG_THAI` chỉ nhận giá trị trong `enum_trang_thai_cong_viec` | Chuẩn hóa trạng thái Kanban |
+| `cong_viec_nhom` | `NGUOI_DUOC_GIAO` nên là thành viên của cùng `MA_NHOM` | Không giao task cho người ngoài nhóm |
+| `tai_lieu` | `DUONG_DAN_LUU_TRU` phải UNIQUE và NOT NULL | Một file lưu trữ có một bản ghi metadata |
+| `tai_lieu` | `DUNG_LUONG >= 0` nếu khác NULL | Dung lượng file không âm |
+| `tai_lieu` | `CHE_DO_HIEN_THI` chỉ nhận giá trị trong `enum_che_do_hien_thi` | Chuẩn hóa quyền hiển thị |
+| `tai_lieu` | `TRANG_THAI` chỉ nhận giá trị trong `enum_trang_thai_tai_lieu` | Chuẩn hóa trạng thái tài liệu |
+| `tai_lieu` | Một tài liệu nên gắn tối đa một ngữ cảnh chính: môn học, nhóm hoặc ghi chú | Tránh mơ hồ nơi tài liệu được sử dụng |
+| `bao_cao_tai_lieu` | UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`) | Một người không report cùng một tài liệu nhiều lần |
+| `bao_cao_tai_lieu` | `TRANG_THAI` chỉ nhận giá trị trong `enum_trang_thai_bao_cao` | Chuẩn hóa tiến độ xử lý report |
+| `bao_cao_tai_lieu` | Tài liệu có nhiều report hợp lệ có thể tự chuyển sang trạng thái chờ kiểm duyệt/ẩn | Phục vụ kiểm duyệt cộng đồng |
+| `flashcard` | `SO_LAN_ON >= 0` | Số lần ôn không âm |
+| `flashcard` | `DIEM_GHI_NHO >= 0` | Điểm ghi nhớ hợp lệ |
+| `flashcard` | Sau mỗi lần ôn, cập nhật `THOI_GIAN_LAN_ON_CUOI` và `THOI_GIAN_LAN_ON_TIEP_THEO` | Phục vụ spaced repetition |
+| `thong_bao` | `LOAI_THONG_BAO` chỉ nhận giá trị trong `enum_loai_thong_bao` | Chuẩn hóa loại thông báo |
+| `thong_bao` | `THOI_GIAN_DA_DOC >= THOI_GIAN_DA_GUI` nếu cả hai khác NULL | Đảm bảo thời gian đọc hợp lệ |
+| `nhat_ky_he_thong` | `MUC_DO` chỉ nhận giá trị trong `enum_muc_do_log` | Chuẩn hóa mức độ log |
+
+## Index Đề Xuất
+
+| Tên index đề xuất | Bảng | Cột / điều kiện | Mục đích |
+|---|---|---|---|
+| `idx_nguoi_dung_vai_tro_trang_thai` | `nguoi_dung` | (`MA_VAI_TRO`, `TRANG_THAI`) | Lọc user theo role và trạng thái |
+| `idx_phien_dang_nhap_user` | `phien_dang_nhap` | (`MA_NGUOI_DUNG`) | Lấy danh sách phiên của một người dùng |
+| `idx_phien_dang_nhap_active` | `phien_dang_nhap` | (`MA_NGUOI_DUNG`, `THOI_GIAN_HET_HAN`) WHERE `THOI_GIAN_THU_HOI IS NULL` | Tìm phiên còn hoạt động |
+| `uq_phien_dang_nhap_fcm_token` | `phien_dang_nhap` | (`FCM_TOKEN`) WHERE `FCM_TOKEN IS NOT NULL` | Đảm bảo FCM token không bị gán trùng |
+| `idx_ho_so_sinh_vien_truong` | `ho_so_sinh_vien` | (`MA_TRUONG`) | Lọc sinh viên theo trường |
+| `idx_hoc_ky_sinh_vien` | `hoc_ky` | (`MA_NGUOI_DUNG`) | Lấy học kỳ theo sinh viên |
+| `idx_mon_hoc_hoc_ky` | `mon_hoc` | (`MA_HOC_KY`) | Lấy môn học theo học kỳ |
+| `idx_thanh_phan_diem_mon` | `thanh_phan_diem` | (`MA_MON_HOC`) | Tính điểm/GPA theo môn |
+| `idx_lich_hoc_mon` | `lich_hoc` | (`MA_MON_HOC`) | Lấy lịch học của môn |
+| `idx_lich_hoc_thu_tiet` | `lich_hoc` | (`THU`, `TIET_BAT_DAU`, `SO_TIET`) | Hỗ trợ kiểm tra trùng thời khóa biểu |
+| `idx_lich_thi_mon_time` | `lich_thi` | (`MA_MON_HOC`, `THOI_GIAN_THI`) | Lấy lịch thi và nhắc lịch |
+| `idx_deadline_mon` | `deadline` | (`MA_MON_HOC`) | Lấy deadline theo môn |
+| `idx_deadline_han_nop` | `deadline` | (`HAN_NOP`) | Tìm deadline sắp đến/quá hạn |
+| `idx_deadline_trang_thai` | `deadline` | (`TRANG_THAI`) | Lọc deadline theo trạng thái |
+| `idx_nhac_nho_user_time` | `nhac_nho` | (`MA_NGUOI_DUNG`, `THOI_GIAN_NHAC`) | Lấy nhắc nhở của người dùng |
+| `idx_nhac_nho_chua_gui` | `nhac_nho` | (`THOI_GIAN_NHAC`) WHERE `THOI_GIAN_DA_GUI IS NULL` | Worker tìm nhắc nhở cần gửi |
+| `idx_ghi_chu_user` | `ghi_chu` | (`MA_NGUOI_DUNG`) | Lấy ghi chú theo người dùng |
+| `idx_ghi_chu_mon` | `ghi_chu` | (`MA_MON_HOC`) | Lấy ghi chú theo môn học |
+| `idx_bo_flashcard_user` | `bo_flashcard` | (`MA_NGUOI_DUNG`) | Lấy bộ flashcard theo người dùng |
+| `idx_bo_flashcard_mon` | `bo_flashcard` | (`MA_MON_HOC`) | Lấy bộ flashcard theo môn |
+| `idx_flashcard_bo` | `flashcard` | (`MA_BO`) | Lấy flashcard trong một bộ |
+| `idx_flashcard_on_tiep_theo` | `flashcard` | (`THOI_GIAN_LAN_ON_TIEP_THEO`) | Tìm flashcard cần ôn |
+| `idx_nhom_hoc_tap_nguoi_tao` | `nhom_hoc_tap` | (`NGUOI_TAO`) | Lấy nhóm do người dùng tạo |
+| `idx_thanh_vien_nhom_user` | `thanh_vien_nhom` | (`MA_NGUOI_DUNG`) | Lấy nhóm mà người dùng tham gia |
+| `idx_thanh_vien_nhom_role` | `thanh_vien_nhom` | (`MA_NHOM`, `VAI_TRO_TRONG_NHOM`) | Tìm trưởng nhóm/thành viên |
+| `idx_cong_viec_nhom_group_status` | `cong_viec_nhom` | (`MA_NHOM`, `TRANG_THAI`) | Lọc task theo nhóm và cột Kanban |
+| `idx_cong_viec_nhom_assignee` | `cong_viec_nhom` | (`NGUOI_DUOC_GIAO`) | Lấy task được giao cho một người |
+| `idx_tai_lieu_owner` | `tai_lieu` | (`NGUOI_TAI_LEN`) | Lấy tài liệu do người dùng tải lên |
+| `idx_tai_lieu_context` | `tai_lieu` | (`MA_MON_HOC`, `MA_NHOM`, `MA_GHI_CHU`) | Lấy tài liệu theo ngữ cảnh |
+| `idx_tai_lieu_trang_thai` | `tai_lieu` | (`TRANG_THAI`) | Lọc tài liệu theo trạng thái |
+| `idx_bao_cao_tai_lieu_status` | `bao_cao_tai_lieu` | (`TRANG_THAI`) | Admin lọc report cần xử lý |
+| `idx_bao_cao_tai_lieu_file` | `bao_cao_tai_lieu` | (`MA_TAI_LIEU`) | Đếm số report của một tài liệu |
+| `idx_thong_bao_user_read` | `thong_bao` | (`MA_NGUOI_NHAN`, `THOI_GIAN_DA_DOC`) | Lấy thông báo chưa đọc/đã đọc |
+| `idx_thong_bao_user_created` | `thong_bao` | (`MA_NGUOI_NHAN`, `THOI_GIAN_TAO`) | Sắp xếp lịch sử thông báo |
+| `idx_nhat_ky_time` | `nhat_ky_he_thong` | (`THOI_GIAN`) | Xem nhật ký theo thời gian |
+| `idx_nhat_ky_muc_do` | `nhat_ky_he_thong` | (`MUC_DO`) | Lọc log theo mức độ |
+| `idx_nhat_ky_actor` | `nhat_ky_he_thong` | (`NGUOI_THUC_HIEN`) | Xem lịch sử thao tác của một người dùng |
+
+## Ghi Chú Triển Khai Constraint
+
+| Ràng buộc | Cách triển khai đề xuất |
+|---|---|
+| Tổng trọng số điểm của một môn bằng 100 | Có thể kiểm tra ở backend service hoặc dùng PostgreSQL trigger |
+| Không trùng lịch học của cùng sinh viên | Nên kiểm tra ở backend service trước khi insert/update; có thể bổ sung trigger nếu cần |
+| Chỉ một trưởng nhóm trong một nhóm | Có thể dùng partial unique index trên `thanh_vien_nhom(MA_NHOM)` khi `VAI_TRO_TRONG_NHOM = 'TRUONG_NHOM'` |
+| Người được giao task phải là thành viên nhóm | Có thể kiểm tra ở backend service hoặc dùng composite FK nếu muốn chặt hơn |
+| Tài liệu chỉ gắn một ngữ cảnh chính | Có thể dùng CHECK với `num_nonnulls(MA_MON_HOC, MA_NHOM, MA_GHI_CHU) <= 1` |
+| Nhắc nhở chỉ gắn với một deadline hoặc một lịch thi | Có thể dùng CHECK với `num_nonnulls(MA_DEADLINE, MA_LICH_THI) = 1` |
