@@ -489,7 +489,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 | `idx_mon_hoc_hoc_ky` | `mon_hoc` | (`MA_HOC_KY`) | Lấy môn học theo học kỳ |
 | `idx_thanh_phan_diem_mon` | `thanh_phan_diem` | (`MA_MON_HOC`) | Tính điểm/GPA theo môn |
 | `idx_lich_hoc_mon` | `lich_hoc` | (`MA_MON_HOC`) | Lấy lịch học của môn |
-Hỗ trợ kiểm tra trùng thời khóa biểu $\color{red}{\text{(XEM LẠI CÓ THỂ TỐI ƯU BẰNG}}$ <br> $\color{red}{\text{KIỂU DỮ LIỆU RANGE KẾT HỢP}}$ <br> $\color{red}{\text{VỚI INDEX GiST VÀ RÀNG BUỘC EXCLUDE)}}$
+| `idx_lich_hoc_thu_tiet` | `lich_hoc` | (`THU`, `TIET_BAT_DAU`, `SO_TIET`) | Hỗ trợ kiểm tra trùng thời khóa biểu $\color{red}{\text{(XEM LẠI CÓ THỂ TỐI ƯU BẰNG}}$ <br> $\color{red}{\text{KIỂU DỮ LIỆU RANGE KẾT HỢP}}$ <br> $\color{red}{\text{VỚI INDEX GiST VÀ RÀNG BUỘC EXCLUDE)}}$
 | `idx_lich_thi_mon_time` | `lich_thi` | (`MA_MON_HOC`, `THOI_GIAN_THI`) | Lấy lịch thi và nhắc lịch |
 | `idx_deadline_mon` | `deadline` | (`MA_MON_HOC`) | Lấy deadline theo môn |
 | `idx_deadline_han_nop` | `deadline` | (`HAN_NOP`) | Tìm deadline sắp đến/quá hạn |
