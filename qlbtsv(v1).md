@@ -12,7 +12,7 @@
 các kiểu dữ liệu ENUM :
 
 1. `enum_trang_thai_nguoi_dung` (`HOAT_DONG`, `BI_KHOA`, `CHUA_XAC_THUC`)
-2. `enum_trang_thai_deadline` (`CHUA_LAM`, `DANG_LAM`, `HOAN_THANH`)
+2. `enum_trang_thai_deadline` (`CHUA_LAM`, `DANG_LAM`, `HOAN_THANH`, `TRE_HAN`)
 3. `enum_vai_tro_nhom` (`TRUONG_NHOM`, `THANH_VIEN`)
 4. `enum_trang_thai_cong_viec` (`CHUA_BAT_DAU`, `DANG_THUC_HIEN`, `HOAN_THANH`, `TRE_HAN`)
 5. `enum_che_do_hien_thi` (`CONG_KHAI`, `RIENG_TU`, `CHIA_SE_NHOM`)
@@ -488,7 +488,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 | `idx_mon_hoc_hoc_ky` | `mon_hoc` | (`MA_HOC_KY`) | Lấy môn học theo học kỳ |
 | `idx_thanh_phan_diem_mon` | `thanh_phan_diem` | (`MA_MON_HOC`) | Tính điểm/GPA theo môn |
 | `idx_lich_hoc_mon` | `lich_hoc` | (`MA_MON_HOC`) | Lấy lịch học của môn |
-| `idx_lich_hoc_thu_tiet` | `lich_hoc` | (`THU`, `TIET_BAT_DAU`, `SO_TIET`) | Hỗ trợ kiểm tra trùng thời khóa biểu |
+| `idx_lich_hoc_thu_tiet` | `lich_hoc` | (`THU`, `TIET_BAT_DAU`, `SO_TIET`) | Hỗ trợ kiểm tra trùng thời khóa biểu (XEM LẠI CÓ THỂ TỐI ƯU BẰNG KIỂU DỮ LIỆU RANGE KẾT HỢP VỚI INDEX GiST VÀ RÀNG BUỘC EXCLUDE)|
 | `idx_lich_thi_mon_time` | `lich_thi` | (`MA_MON_HOC`, `THOI_GIAN_THI`) | Lấy lịch thi và nhắc lịch |
 | `idx_deadline_mon` | `deadline` | (`MA_MON_HOC`) | Lấy deadline theo môn |
 | `idx_deadline_han_nop` | `deadline` | (`HAN_NOP`) | Tìm deadline sắp đến/quá hạn |
@@ -514,7 +514,6 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 | `idx_thong_bao_user_read` | `thong_bao` | (`MA_NGUOI_NHAN`, `THOI_GIAN_DA_DOC`) | Lấy thông báo chưa đọc/đã đọc |
 | `idx_thong_bao_user_created` | `thong_bao` | (`MA_NGUOI_NHAN`, `THOI_GIAN_TAO`) | Sắp xếp lịch sử thông báo |
 | `idx_nhat_ky_time` | `nhat_ky_he_thong` | (`THOI_GIAN`) | Xem nhật ký theo thời gian |
-| `idx_nhat_ky_muc_do` | `nhat_ky_he_thong` | (`MUC_DO`) | Lọc log theo mức độ |
 | `idx_nhat_ky_actor` | `nhat_ky_he_thong` | (`NGUOI_THUC_HIEN`) | Xem lịch sử thao tác của một người dùng |
 
 ## Ghi Chú Triển Khai Constraint
