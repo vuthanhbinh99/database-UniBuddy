@@ -3,7 +3,7 @@
 ## Tổng Quan
 
 - Database: `QLBTSV`
-- Tổng số bảng: `25`
+- Tổng số bảng: `26`
 - Tên bảng dùng tiếng Việt không dấu.
 - Các trường trạng thái và phân loại được chuẩn hóa bằng kiểu dữ liệu `ENUM` của PostgreSQL.
 - Thêm các contraint, ràng buộc, index cho database hệ thống
@@ -46,10 +46,11 @@ các kiểu dữ liệu ENUM :
 19. nhom_hoc_tap
 20. thanh_vien_nhom
 21. cong_viec_nhom
-22. tai_lieu
-23. bao_cao_tai_lieu
-24. thong_bao
-25. nhat_ky_he_thong
+22. binh_luan_cong_viec
+23. tai_lieu
+24. bao_cao_tai_lieu
+25. thong_bao
+26. nhat_ky_he_thong
 ```
 
 ## Cấu Trúc Từng Table
@@ -292,6 +293,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_MON_HOC`, `TEN_THANH_PHAN`).
 | `NGUOI_TAO` | `uuid` | NOT NULL, FK -> `nguoi_dung.MA_NGUOI_DUNG` | Người tạo nhóm |
 | `TEN_NHOM` | `varchar(255)` | NOT NULL | Tên nhóm |
 | `MA_THAM_GIA` | `varchar(30)` | NOT NULL, UNIQUE | Mã tham gia nhóm |
+| `LINK_NHOM_CHAT` | `text` | NOT NULL | Đường link nhóm chat Zalo/Messenger/Discord |
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
 | `THOI_GIAN_CAP_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
 
@@ -320,7 +322,17 @@ Khóa chính: (`MA_NHOM`, `MA_NGUOI_DUNG`).
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
 | `THOI_GIAN_CAP_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
 
-## 22. `tai_lieu`
+## 22. `binh_luan_cong_viec`
+
+| Cột | Kiểu dữ liệu | Ràng buộc | Mô tả|
+|---|---|---|---|
+| `MA_BINH_LUAN` | `uuid` | PK | Mã bình luận |
+| `MA_CONG_VIEC` | `uuid` | NOT NULL, FK -> `cong_viec_nhom.MA_CONG_VIEC` | Công việc được bình luận |
+| `MA_NGUOI_DUNG` | `uuid` | NOT NULL, FK -> `nguoi_dung.MA_NGUOI_DUNG` | Người viết bình luận |
+| `NOI_DUNG` | `text` | NOT NULL | Nội dung bình luận |
+| `THOI_GIAN_tao` | `timestamptz` | NOT NULL | Thời điểm tạo bình luận | 
+
+## 23. `tai_lieu`
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
@@ -338,7 +350,7 @@ Khóa chính: (`MA_NHOM`, `MA_NGUOI_DUNG`).
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
 | `THOI_GIAN_CAP_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
 
-## 23. `bao_cao_tai_lieu`
+## 24. `bao_cao_tai_lieu`
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
@@ -354,7 +366,7 @@ Khóa chính: (`MA_NHOM`, `MA_NGUOI_DUNG`).
 
 Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 
-## 24. `thong_bao`
+## 25. `thong_bao`
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
@@ -368,7 +380,7 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 | `THOI_GIAN_DA_DOC` | `timestamptz` | NULL | Thời điểm đã đọc |
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
 
-## 25. `nhat_ky_he_thong`
+## 26. `nhat_ky_he_thong`
 
 | Cột | Kiểu dữ liệu | Ràng buộc | Mô tả |
 |---|---|---|---|
@@ -412,6 +424,8 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 | `thanh_vien_nhom` | `MA_NGUOI_DUNG` | `nguoi_dung.MA_NGUOI_DUNG` | N-1 |
 | `cong_viec_nhom` | `MA_NHOM` | `nhom_hoc_tap.MA_NHOM` | N-1 |
 | `cong_viec_nhom` | `NGUOI_DUOC_GIAO` | `nguoi_dung.MA_NGUOI_DUNG` | N-1 |
+| `binh_luan_cong_viec` | `MA_CONG_VIEC` | `cong_viec.MA_CONG_VIEC` | N-1 |
+| `binh_luan_cong_viec` | `MA_NGUOI_DUNG` | `nguoi_dung.MA_NGUOI_DUNG` | N-1 |
 | `tai_lieu` | `NGUOI_TAI_LEN` | `nguoi_dung.MA_NGUOI_DUNG` | N-1 |
 | `tai_lieu` | `MA_MON_HOC` | `mon_hoc.MA_MON_HOC` | N-1 |
 | `tai_lieu` | `MA_NHOM` | `nhom_hoc_tap.MA_NHOM` | N-1 |
@@ -507,6 +521,9 @@ Ràng buộc bổ sung: UNIQUE (`MA_TAI_LIEU`, `NGUOI_BAO_CAO`).
 | `idx_thanh_vien_nhom_role` | `thanh_vien_nhom` | (`MA_NHOM`, `VAI_TRO_TRONG_NHOM`) | Tìm trưởng nhóm/thành viên |
 | `idx_cong_viec_nhom_group_status` | `cong_viec_nhom` | (`MA_NHOM`, `TRANG_THAI`) | Lọc task theo nhóm và cột Kanban |
 | `idx_cong_viec_nhom_assignee` | `cong_viec_nhom` | (`NGUOI_DUOC_GIAO`) | Lấy task được giao cho một người |
+| `idx_binh_luan_cong_viec_task_item` | `binh_luan_cong_viec` | (MA_CONG_VIEC, THOI_GIAN_TAO) | lấy danh sách bình luận của một task theo thời gian |
+| `idx_binh_luan_cong_viec_user` | `binh_luan_cong_viec` | (MA_NGUOI_DUNG) | Xem bình luận do một người dùng tạo |
+| `idx_binh_luan_cong_viec_link_chat` | `binh_luan_cong_viec` | (LINK_NHOM_CHAT) WHERE LINK_NHOM_CHAT IS NOT NULL | Hỗ trợ lọc nhóm đã cấu hình link nhóm chat |
 | `idx_tai_lieu_owner` | `tai_lieu` | (`NGUOI_TAI_LEN`) | Lấy tài liệu do người dùng tải lên |
 | `idx_tai_lieu_context` | `tai_lieu` | (`MA_MON_HOC`, `MA_NHOM`, `MA_GHI_CHU`) | Lấy tài liệu theo ngữ cảnh |
 | `idx_tai_lieu_trang_thai` | `tai_lieu` | (`TRANG_THAI`) | Lọc tài liệu theo trạng thái |
