@@ -72,7 +72,9 @@ $$GPA = \frac{\sum_{j=1}^{m} (DIEM\_HE\_4_j \times SO\_TIN\_CHI_j)}{\sum_{j=1}^{
 
 ### BR-SCH-03: Ràng buộc Thời gian đặt Nhắc nhở
 - **Mô tả:** Đảm bảo tính hợp lệ về mặt thời gian của các thông báo nhắc nhở tự động.
-- **Logic xử lý:** Khi sinh viên tạo một bản ghi nhắc nhở học tập trong bảng `nhac_nho`:
+- **Logic xử lý:** 
+  `Cơ chế mặc định` (Hệ thống tự động): Ngay khi một `deadline` hoặc `lich_thi` được tạo ra, hệ thống sẽ tự động chèn sẵn các bản ghi nhắc nhở tiêu chuẩn vào bảng `nhac_nho` (ví dụ: một bản ghi trước hạn 24 giờ và một bản ghi trước hạn 3 giờ).
+  `Cơ chế tùy chỉnh` Sinh viên có quyền tạo, cập nhật một bản ghi nhắc nhở học tập trong bảng `nhac_nho`:
   - Giá trị `THOI_GIAN_NHAC` bắt buộc phải lớn hơn thời gian hiện tại (`NOW()`).
   - Nếu nhắc nhở liên kết với một deadline (`MA_DEADLINE`), `THOI_GIAN_NHAC` phải nhỏ hơn hoặc bằng `HAN_NOP`.
   - Nếu nhắc nhở liên kết với một lịch thi (`MA_LICH_THI`), `THOI_GIAN_NHAC` phải nhỏ hơn hoặc bằng `THOI_GIAN_THI`.
