@@ -291,6 +291,8 @@ Ràng buộc bổ sung: UNIQUE (`MA_MON_HOC`, `TEN_THANH_PHAN`).
 |---|---|---|---|
 | `MA_NHOM` | `uuid` | PK | Mã nhóm học tập |
 | `NGUOI_TAO` | `uuid` | NOT NULL, FK -> `nguoi_dung.MA_NGUOI_DUNG` | Người tạo nhóm |
+| `MA_TRUONG` | `int` | NOT NULL, FK -> `truong_hoc.MA_TRUONG` | Mã trường học|
+| `MA_MON` | `varchar(50)` | NULL | Mã môn học của trường|
 | `TEN_NHOM` | `varchar(255)` | NOT NULL | Tên nhóm |
 | `MA_THAM_GIA` | `varchar(30)` | NOT NULL, UNIQUE | Mã tham gia nhóm |
 | `LINK_NHOM_CHAT` | `text` | NOT NULL | Đường link nhóm chat Zalo/Messenger/Discord |
