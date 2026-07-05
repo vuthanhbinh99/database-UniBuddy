@@ -32,7 +32,7 @@ Tài liệu này định nghĩa các quy tắc nghiệp vụ (Business Rules - B
 
 ### BR-EDU-02: Ràng buộc Tổng trọng số Điểm thành phần
 - **Mô tả:** Đảm bảo cấu trúc điểm số của một môn học thiết lập chính xác theo quy chế đào tạo.
-- **Logic xử lý:** Đối với mỗi môn học (`MA_MON_HOC`), tổng tất cả các giá trị `TRONG_SO` của các thành phần điểm con trong bảng `thanh_phan_diem` bắt buộc phải bằng chính xác $100\%$ (hoặc $1.00$). Hệ thống sẽ chặn hành động lưu điểm và cảnh báo nếu tổng trọng số lớn hơn hoặc nhỏ hơn $100\%$.
+- **Logic xử lý:** Đối với mỗi môn học (`MA_MON_HOC`), tổng tất cả các giá trị `TRONG_SO` của các thành phần điểm con trong bảng `thanh_phan_diem` bắt buộc phải bằng chính xác $100\%$ (hoặc $0.00$). Hệ thống sẽ chặn hành động lưu điểm và cảnh báo nếu tổng trọng số lớn hơn hoặc nhỏ hơn $100\%$.
 - **Bảng ảnh hưởng:** `thanh_phan_diem`.
 
 ### BR-EDU-03: Công thức Tính Điểm Tổng kết Môn học (Hệ 10)
