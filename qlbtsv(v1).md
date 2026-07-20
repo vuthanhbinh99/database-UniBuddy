@@ -77,6 +77,8 @@ các kiểu dữ liệu ENUM :
 | `TRANG_THAI` | `enum_trang_thai_nguoi_dung` | NOT NULL | Trạng thái tài khoản |
 | `THOI_GIAN_TAO` | `timestamptz` | NOT NULL | Thời điểm tạo |
 | `THOI_GIAN_CAP_NHAT` | `timestamptz` | NOT NULL | Thời điểm cập nhật |
+| `SO_GIO_NHAC_DEADLINE` | ` smallint` | NULL | Giờ nhắc deadline|
+| `NHAN_THONG_BAO_DAY` | ` boolean` | NOT NULL | Cho phép người dùng tắt hoặc mở để nhận thông báo|
 
 ## 3. `truong_hoc`
 
